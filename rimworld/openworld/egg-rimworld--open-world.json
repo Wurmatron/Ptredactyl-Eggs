@@ -22,7 +22,8 @@
     },
     "scripts": {
         "installation": {
-            "script": "# Install Deps\r\napt install unzip\r\napt install wget\r\n\r\n# Download Server\r\nwget ${SERVER_DOWNLOAD} -P \/mnt\/server\/\r\nunzip \/mnt\/server\/LinuxX64_SelfContained.zip -d \/mnt\/server\r\nrm -rf \/mnt\/server\/LinuxX64_SelfContained.zip\r\n\r\n# Ready Server to ru\r\nmv \/mnt\/server\/'Open World Server' \/mnt\/server\/OpenWorld-Server\r\nchmod +x \/mnt\/server\/OpenWorld-Server",
+            "script": "# Install Deps\r\napt install unzip\r\napt install wget\r\nwget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb\r\ndpkg -i packages-microsoft-prod.deb\r\nrm packages-microsoft-prod.deb\r\napt-get update\r\napt-get install -y aspnetcore-runtime-6.0\r\n
+            \r\n# Download Server\r\nwget ${SERVER_DOWNLOAD} -P \/mnt\/server\/\r\nunzip \/mnt\/server\/LinuxX64_SelfContained.zip -d \/mnt\/server\r\nrm -rf \/mnt\/server\/LinuxX64_SelfContained.zip\r\n\r\n# Ready Server to ru\r\nmv \/mnt\/server\/'Open World Server' \/mnt\/server\/OpenWorld-Server\r\nchmod +x \/mnt\/server\/OpenWorld-Server",
             "container": "ghcr.io\/pterodactyl\/installers:debian",
             "entrypoint": "bash"
         }
@@ -32,7 +33,7 @@
             "name": "Server Download",
             "description": "Link to download the most updated OpenWorld Mod,",
             "env_variable": "SERVER_DOWNLOAD",
-            "default_value": "https:\/\/github.com\/TastyLollipop\/OpenWorld\/releases\/download\/1.3.9\/LinuxX64_SelfContained.zip",
+            "default_value": "https:\/\/github.com\/TastyLollipop\/OpenWorld\/releases\/download\/1.4.0\/LinuxX64.zip",
             "user_viewable": false,
             "user_editable": true,
             "rules": "required|string"
