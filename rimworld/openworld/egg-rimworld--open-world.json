@@ -1,19 +1,19 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1",
+        "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-05-24T19:09:41-04:00",
+    "exported_at": "2023-01-15T16:36:44-05:00",
     "name": "RimWorld - OpenWorld",
     "author": "wurmatron@wurmcraft.com",
     "description": "Multiplayer Rimworld via Openworld by TastyLolipop\r\n\r\nhttps:\/\/github.com\/TastyLollipop\/OpenWorld\r\nhttps:\/\/steamcommunity.com\/workshop\/filedetails\/?id=2768146099",
     "features": null,
-    "images": [
-        "quay.io\/parkervcp\/pterodactyl-images:base_ubuntu"
-    ],
+    "docker_images": {
+        "ghcr.io\/parkervcp\/yolks:dotnet_3.1": "ghcr.io\/parkervcp\/yolks:dotnet_3.1"
+    },
     "file_denylist": [],
-    "startup": ".\/OpenWorld-Server",
+    "startup": ".\/run.sh",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Network Line Started\"\r\n}",
@@ -22,21 +22,21 @@
     },
     "scripts": {
         "installation": {
-            "script": "# Install Deps\r\napt install unzip\r\napt install wget\r\nwget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb\r\ndpkg -i packages-microsoft-prod.deb\r\nrm packages-microsoft-prod.deb\r\napt-get update\r\napt-get install -y aspnetcore-runtime-6.0\r\n
-            \r\n# Download Server\r\nwget ${SERVER_DOWNLOAD} -P \/mnt\/server\/\r\nunzip \/mnt\/server\/LinuxX64_SelfContained.zip -d \/mnt\/server\r\nrm -rf \/mnt\/server\/LinuxX64_SelfContained.zip\r\n\r\n# Ready Server to ru\r\nmv \/mnt\/server\/'Open World Server' \/mnt\/server\/OpenWorld-Server\r\nchmod +x \/mnt\/server\/OpenWorld-Server",
-            "container": "ghcr.io\/pterodactyl\/installers:debian",
+            "script": "# Install Deps\r\napt install unzip\r\napt install wget\r\n\r\nif [[ ! -d \/mnt\/server ]]; then\r\n  mkdir \/mnt\/server\r\nfi\r\n\r\ncd \/mnt\/server\r\n\r\n# Download Server\r\nwget ${SERVER_DOWNLOAD}\r\nunzip LinuxX64.zip\r\nrm -rf LinuxX64.zip\r\n\r\n# Ready Server to run\r\nmv 'Open World Server' OpenWorld-Server\r\nchmod +x OpenWorld-Server\r\nwget https:\/\/gist.githubusercontent.com\/Wurmatron\/875d342747ac241b3d458dc572e8fe84\/raw\/cd9e4d806720cd09926e8ab8a92e56abad58efdc\/run.sh\r\nchmod +x run.sh",
+            "container": "ghcr.io\/parkervcp\/yolks:dotnet_3.1",
             "entrypoint": "bash"
         }
     },
     "variables": [
         {
             "name": "Server Download",
-            "description": "Link to download the most updated OpenWorld Mod,",
+            "description": "",
             "env_variable": "SERVER_DOWNLOAD",
-            "default_value": "https:\/\/github.com\/TastyLollipop\/OpenWorld\/releases\/download\/1.4.0\/LinuxX64.zip",
+            "default_value": "https:\/\/github.com\/TastyLollipop\/OpenWorld\/releases\/latest\/download\/LinuxX64.zip",
             "user_viewable": false,
             "user_editable": true,
-            "rules": "required|string"
+            "rules": "required|string|max:100",
+            "field_type": "text"
         }
     ]
 }
